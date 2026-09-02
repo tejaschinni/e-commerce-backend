@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-const initDb = require('./config/initDB');
+const sequelize = require('./config/database');
 
 dotenv.config();
 
@@ -13,7 +13,9 @@ let server;
 
 async function startServer() {
   try {
-    await initDb();
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: true });
+    
     server = app.listen(PORT, HOST, () => {
       console.log(`[server] API running at http://${HOST}:${PORT}`);
     });
